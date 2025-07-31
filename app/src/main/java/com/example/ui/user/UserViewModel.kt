@@ -9,20 +9,24 @@ import com.example.ui.utils.UserPreferences
 
 class UserViewModel : ViewModel() {
 
-    private val _username = MutableLiveData<String>()
-    val username: LiveData<String> = _username
+    private val _listUserName = MutableLiveData<List<String>>(mutableListOf())
+    val listUserName: LiveData<List<String>> = _listUserName
 
-    fun setUsername(username: String) {
-        Log.i(APP_TAG, "alterando o live data do username")
-        _username.value = username
+    fun addUserName(name: String) {
+        val currentList = _listUserName.value.orEmpty().toMutableList()
+        currentList.add(name)
+        _listUserName.value = currentList
+
+        Log.i(APP_TAG, "Lista atualizada: $currentList")
     }
 
-    fun saveUsername() {
-        UserPreferences.saveUsername(_username.value.toString())
+    fun saveAllUserNames() {
+        Log.i(APP_TAG," VM Salvando lista de nomes...")
+        UserPreferences.saveAllUserNames(_listUserName.value.orEmpty())
     }
 
-    fun loadUsername(){
-        _username.value = UserPreferences.getUsername()
+    fun loadAllUserNames() {
+        Log.i(APP_TAG," VM Recuperando lista de nomes...")
+        _listUserName.value = UserPreferences.loadAllUserNames()
     }
-
 }

@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.study2.databinding.FragmentUserBinding
@@ -54,20 +55,32 @@ class UserFragment : Fragment() {
     }
 
     private fun configureButtons() = with(binding) {
-        buttonChangeName.setOnClickListener {
+        buttonSaveName.setOnClickListener {
             Log.i(APP_TAG, "clcik no botão de alterar nome")
-            viewModel.setUsername(editNewName.text.toString())
+            viewModel.addUserName(editNewName.text.toString())
         }
     }
 
     private fun configureObservers() = with(binding) {
-        viewModel.username.observe(viewLifecycleOwner) { username ->
-            txtviewYourName.text = username
-        }
+        //observando sempre que tem mudança no username
+        //viewModel.username.observe(viewLifecycleOwner) { username ->
+        //    Log.i(APP_TAG, "Obsrvando o username para mudança")
+        //    txtviewYourName.text = username
+        //}
+        //observando se o nome valido
+        //viewModel.isUsernameValid.observe(viewLifecycleOwner) { isUsernameValid ->
+        //    Log.i(APP_TAG, "Obsrvando o username para validação")
+        //    if (isUsernameValid) {
+        //        Toast.makeText(context, "Nome válido", Toast.LENGTH_SHORT).show()
+        //        viewModel.setUsername(editNewName.text.toString())
+        //    } else {
+        //        Toast.makeText(context, "Nome inválido", Toast.LENGTH_SHORT).show()
+        //    }
+        //}
     }
 
-    private fun loadSharedPreferencesData(){
-        viewModel.loadUsername()
+    private fun loadSharedPreferencesData() {
+        viewModel.loadAllUserNames()
     }
 
     override fun onStart() {
@@ -94,7 +107,7 @@ class UserFragment : Fragment() {
     override fun onStop() {
         Log.i(APP_TAG, "onStop aqui")
         super.onStop()
-        viewModel.saveUsername()
+        viewModel.saveAllUserNames()
         // Este método é chamado quando a Fragment não está mais visível para o usuário.
         // Aqui você deve liberar recursos que não são necessários enquanto a Fragment não está visível, como cancelar requisições de rede ou limpar dados da UI.
     }

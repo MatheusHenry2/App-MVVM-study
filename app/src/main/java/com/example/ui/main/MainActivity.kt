@@ -11,7 +11,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.i(APP_TAG, "onCreate chamado")
+        Log.i(APP_TAG, "onCreate main activity")
         setContentView(R.layout.activity_main)
     }
 

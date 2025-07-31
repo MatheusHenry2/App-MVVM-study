@@ -7,6 +7,8 @@ import com.example.ui.utils.Constants.KEY_USERNAME
 import com.example.ui.utils.Constants.SHARE_PREF_NAME
 import androidx.core.content.edit
 import com.example.ui.utils.Constants.APP_TAG
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 object UserPreferences {
 
@@ -17,14 +19,20 @@ object UserPreferences {
         sharedPreferences = context.getSharedPreferences(SHARE_PREF_NAME, Context.MODE_PRIVATE)
     }
 
-    fun saveUsername(username: String) {
-        Log.i(APP_TAG, "Salvando user no Sharedprefenreces")
-        sharedPreferences.edit() { putString(KEY_USERNAME, username) }
+    fun saveAllUserNames(usernames: List<String>) {
+        Log.i(APP_TAG, "Salvando lista de usuários no SharedPreferences $usernames")
+        val usernamesList = Gson().toJson(usernames)
+        sharedPreferences.edit() { putString(KEY_USERNAME, usernamesList) }
     }
 
-    fun getUsername(): String? {
-        Log.i(APP_TAG, "Recuperando user no sharedPferences")
-        return sharedPreferences.getString(KEY_USERNAME, "")
+    fun loadAllUserNames(): List<String> {
+        val json = sharedPreferences.getString(KEY_USERNAME, null)
+        return if (json != null) {
+            val type = object : TypeToken<List<String>>() {}.type
+            Gson().fromJson(json, type)
+        } else {
+            emptyList()
+        }
     }
 }
 
