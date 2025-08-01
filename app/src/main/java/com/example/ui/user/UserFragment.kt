@@ -1,5 +1,6 @@
 package com.example.ui.user
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,6 +9,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.study2.R
 import com.example.study2.databinding.FragmentUserBinding
 import com.example.ui.utils.Constants.APP_TAG
 
@@ -15,6 +18,7 @@ class UserFragment : Fragment() {
 
     private val viewModel: UserViewModel by viewModels()
     private lateinit var binding: FragmentUserBinding
+    private lateinit var adapter: NameAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.i(APP_TAG, "onCreate aqui")
@@ -62,21 +66,19 @@ class UserFragment : Fragment() {
     }
 
     private fun configureObservers() = with(binding) {
-        //observando sempre que tem mudança no username
-        //viewModel.username.observe(viewLifecycleOwner) { username ->
-        //    Log.i(APP_TAG, "Obsrvando o username para mudança")
-        //    txtviewYourName.text = username
-        //}
-        //observando se o nome valido
-        //viewModel.isUsernameValid.observe(viewLifecycleOwner) { isUsernameValid ->
-        //    Log.i(APP_TAG, "Obsrvando o username para validação")
-        //    if (isUsernameValid) {
-        //        Toast.makeText(context, "Nome válido", Toast.LENGTH_SHORT).show()
-        //        viewModel.setUsername(editNewName.text.toString())
-        //    } else {
-        //        Toast.makeText(context, "Nome inválido", Toast.LENGTH_SHORT).show()
-        //    }
-        //}
+        adapter = NameAdapter()
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        viewModel.listUserName.observe(viewLifecycleOwner) { list ->
+            Log.i(APP_TAG, "Recicler view atualizando com $list")
+            adapter.submitList(list)
+            viewModel.updateCounter(adapter.itemCount)
+        }
+
+        viewModel.counter.observe(viewLifecycleOwner) { counter ->
+            txtCounter.text = getString(R.string.contador, counter ?: 0)
+        }
     }
 
     private fun loadSharedPreferencesData() {

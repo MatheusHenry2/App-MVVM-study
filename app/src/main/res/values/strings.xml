@@ -3,4 +3,5 @@
     <string name="save_name">Save name</string>
     <string name="enter_yor_new_name">enter yor new name</string>
     <string name="matheus_henry">Matheus Henry</string>
+    <string name="contador">Contador: %1$d</string>
 </resources>

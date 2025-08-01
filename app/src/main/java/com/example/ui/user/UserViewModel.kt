@@ -12,12 +12,19 @@ class UserViewModel : ViewModel() {
     private val _listUserName = MutableLiveData<List<String>>(mutableListOf())
     val listUserName: LiveData<List<String>> = _listUserName
 
+    private val _counter = MutableLiveData<Int>()
+    val counter: LiveData<Int> = _counter
+
     fun addUserName(name: String) {
         val currentList = _listUserName.value.orEmpty().toMutableList()
         currentList.add(name)
         _listUserName.value = currentList
 
         Log.i(APP_TAG, "Lista atualizada: $currentList")
+    }
+
+    fun updateCounter(totalItems: Int) {
+        _counter.postValue(totalItems)
     }
 
     fun saveAllUserNames() {
